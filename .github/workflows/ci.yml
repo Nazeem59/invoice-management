@@ -17,12 +17,33 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-24.04
 
+    env:
+      DB_URL: jdbc:mysql://127.0.0.1:3306/invoice_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Jakarta
+      DB_USERNAME: root
+      DB_PASSWORD: ci_root_password
+      JWT_SECRET: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci_root_password
+          MYSQL_DATABASE: invoice_management
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci_root_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+          --health-start-period=30s
+
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v5
 
       - name: Set up Java 21
-        uses: actions/setup-java@v6
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -30,6 +51,15 @@ jobs:
 
       - name: Verify Java version
         run: java -version
+
+      - name: Initialize database schema
+        run: |
+          mysql \
+            --host=127.0.0.1 \
+            --port=3306 \
+            --user=root \
+            --password=ci_root_password \
+            < database/init/01-schema.sql
 
       - name: Grant execute permission to Maven Wrapper
         run: chmod +x mvnw
