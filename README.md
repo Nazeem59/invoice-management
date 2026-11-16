@@ -162,7 +162,7 @@ Docker Compose is used to run the application and MySQL database.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/invoice-management.git
+git clone https://github.com/Nazeem59/invoice-management.git
 cd invoice-management
 ```
 
