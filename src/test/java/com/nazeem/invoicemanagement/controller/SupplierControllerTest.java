@@ -250,4 +250,50 @@ class SupplierControllerTest {
         verify(supplierService).getSupplierById(999L);
     }
 
+    @Test
+    @WithMockUser(roles = "APPROVER")
+    void createSupplierShouldReturnForbiddenForApprover() throws Exception {
+
+        mockMvc.perform(post("/api/suppliers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                createSupplierRequest())))
+                .andExpect(status().isForbidden());
+
+        verify(supplierService, never()).createSupplier(any());
+    }
+
+    @Test
+    @WithMockUser(roles = "APPROVER")
+    void updateSupplierShouldReturnForbiddenForApprover() throws Exception {
+
+        mockMvc.perform(put("/api/suppliers/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                createSupplierRequest())))
+                .andExpect(status().isForbidden());
+
+        verify(supplierService, never()).updateSupplier(any(), any());
+    }
+
+    @Test
+    @WithMockUser(roles = "APPROVER")
+    void deleteSupplierShouldReturnForbiddenForApprover() throws Exception {
+
+        mockMvc.perform(delete("/api/suppliers/{id}", 1L))
+                .andExpect(status().isForbidden());
+
+        verify(supplierService, never()).deleteSupplier(any());
+    }
+
+    @Test
+    @WithMockUser(roles = "APPROVER")
+    void getAllSuppliersShouldBeAllowedForApprover() throws Exception {
+
+        when(supplierService.getAllSuppliers()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/suppliers"))
+                .andExpect(status().isOk());
+    }
+
 }

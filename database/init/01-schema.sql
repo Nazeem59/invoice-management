@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: invoice_management
+-- Database: invoice_management
 -- ------------------------------------------------------
 -- Server version	8.0.46
 
@@ -45,18 +45,9 @@ CREATE TABLE `audit_logs` (
   KEY `idx_audit_user` (`user_id`),
   KEY `idx_audit_created` (`created_at`),
   CONSTRAINT `fk_audit_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `audit_logs`
---
-
-LOCK TABLES `audit_logs` WRITE;
-/*!40000 ALTER TABLE `audit_logs` DISABLE KEYS */;
-INSERT INTO `audit_logs` VALUES (1,1,'CREATE','SUPPLIER',3,NULL,'{\"id\": 3, \"city\": \"\", \"email\": \"supplier3@example.com\", \"phone\": \"082131241125\", \"active\": true, \"address\": \"\", \"country\": \"Singapore\", \"bankName\": \"\", \"taxNumber\": \"\", \"supplierCode\": \"SUP-003\", \"supplierName\": \"Supplier 3\", \"bankAccountNumber\": \"\"}','0:0:0:0:0:0:0:1','2026-11-16 04:00:28'),(2,1,'CREATE','INVOICE',2,NULL,'{\"id\": 2, \"items\": [{\"id\": 3, \"taxRate\": 0, \"quantity\": 1, \"lineTotal\": 1000000.0, \"taxAmount\": 0.0, \"unitPrice\": 1000000, \"itemDescription\": \"Laptop\"}], \"status\": \"DRAFT\", \"dueDate\": [2026, 11, 16], \"currency\": \"SGD\", \"subtotal\": 1000000.0, \"taxAmount\": 0.0, \"supplierId\": 3, \"description\": \"Testing invoice\", \"invoiceDate\": [2026, 11, 16], \"totalAmount\": 1000000.0, \"supplierName\": \"Supplier 3\", \"invoiceNumber\": \"INV-2026-219E71AF\"}','0:0:0:0:0:0:0:1','2026-11-16 04:01:14');
-/*!40000 ALTER TABLE `audit_logs` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `invoice_approvals`
@@ -79,18 +70,9 @@ CREATE TABLE `invoice_approvals` (
   KEY `idx_approval_user` (`approver_id`),
   CONSTRAINT `fk_approval_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_approval_user` FOREIGN KEY (`approver_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `invoice_approvals`
---
-
-LOCK TABLES `invoice_approvals` WRITE;
-/*!40000 ALTER TABLE `invoice_approvals` DISABLE KEYS */;
-INSERT INTO `invoice_approvals` VALUES (1,1,2,1,'APPROVED','Approved by najim','2026-11-16 01:56:04','2026-11-16 01:54:49');
-/*!40000 ALTER TABLE `invoice_approvals` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `invoice_items`
@@ -112,18 +94,9 @@ CREATE TABLE `invoice_items` (
   PRIMARY KEY (`id`),
   KEY `idx_invoice_item_invoice` (`invoice_id`),
   CONSTRAINT `fk_invoice_item_header` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `invoice_items`
---
-
-LOCK TABLES `invoice_items` WRITE;
-/*!40000 ALTER TABLE `invoice_items` DISABLE KEYS */;
-INSERT INTO `invoice_items` VALUES (1,1,'Laptop Dell Latitude',2.00,12000000.00,11.00,2640000.00,26640000.00,'2026-11-16 01:36:33'),(2,1,'Wireless Mouse',5.00,250000.00,11.00,137500.00,1387500.00,'2026-11-16 01:36:33'),(3,2,'Laptop',1.00,1000000.00,0.00,0.00,1000000.00,'2026-11-16 04:01:14');
-/*!40000 ALTER TABLE `invoice_items` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `invoices`
@@ -155,18 +128,9 @@ CREATE TABLE `invoices` (
   KEY `idx_invoice_supplier` (`supplier_id`),
   CONSTRAINT `fk_invoice_creator` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `fk_invoice_supplier` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `invoices`
---
-
-LOCK TABLES `invoices` WRITE;
-/*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
-INSERT INTO `invoices` VALUES (1,'INV-2026-0B45EE0C',1,'2026-11-15','2026-12-15','IDR',25250000.00,2777500.00,28027500.00,'APPROVED','IT Infrastructure Equipment',1,'2026-11-16 01:36:33','2026-11-16 01:56:04'),(2,'INV-2026-219E71AF',3,'2026-11-16','2026-11-16','SGD',1000000.00,0.00,1000000.00,'DRAFT','Testing invoice',1,'2026-11-16 04:01:14','2026-11-16 04:01:14');
-/*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `suppliers`
@@ -192,7 +156,7 @@ CREATE TABLE `suppliers` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `supplier_code` (`supplier_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +165,9 @@ CREATE TABLE `suppliers` (
 
 LOCK TABLES `suppliers` WRITE;
 /*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
-INSERT INTO `suppliers` VALUES (1,'SUP-001','PT Example Supplier','supplier@example.com','081234567890',NULL,NULL,NULL,'Indonesia',NULL,NULL,1,'2026-11-15 07:12:44','2026-11-15 07:12:44'),(3,'SUP-003','Supplier 3','supplier3@example.com','082131241125','','','','Singapore','','',1,'2026-11-16 04:00:28','2026-11-16 04:00:28');
+INSERT INTO `suppliers` VALUES
+(1,'SUP-001','Example Supplier A','supplier-a@example.com','+62-000-000-001',NULL,NULL,NULL,'Indonesia',NULL,NULL,1,NOW(),NOW()),
+(2,'SUP-002','Example Supplier B','supplier-b@example.com','+65-0000-0002',NULL,NULL,NULL,'Singapore',NULL,NULL,1,NOW(),NOW());
 /*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,7 +189,7 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,7 +198,12 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'System Administrator','admin@invoice.local','$2a$12$UwME9ckAG2Tz25/vvAkd2.r.lWAvyRuWm9NIzwgJCuTNZ7q8Vz.AS','ADMIN',1,'2026-11-15 07:12:44','2026-11-15 07:17:37'),(2,'Approver','approver@invoice.local','$2a$12$v9J2RhWsbDaoC3nbXcs8yOp9y1HiDqiSohIJ80Sd7hNCTwmZw.xaW','APPROVER',1,'2026-11-16 01:46:23','2026-11-16 01:46:23'),(3,'Finance','finance@invoice.local','$2a$12$WMhFf8XA8JqsFG3ZPtKVduzLrll/fpjPj9aEceGTOkCJpwLk0.lBC','FINANCE',1,'2026-11-16 01:46:23','2026-11-16 01:46:23');
+-- Demo accounts for local development only. Password for all three: Demo@12345
+-- Change or remove these accounts before exposing the API publicly.
+INSERT INTO `users` VALUES
+(1,'Demo Administrator','admin@invoice.local','$2a$12$H2ElZkVZ7nwLju14Z5hMdO3BrGt/nYuXmBecTlmgO2xOp6Qnk.OWe','ADMIN',1,NOW(),NOW()),
+(2,'Demo Approver','approver@invoice.local','$2a$12$H2ElZkVZ7nwLju14Z5hMdO3BrGt/nYuXmBecTlmgO2xOp6Qnk.OWe','APPROVER',1,NOW(),NOW()),
+(3,'Demo Finance','finance@invoice.local','$2a$12$H2ElZkVZ7nwLju14Z5hMdO3BrGt/nYuXmBecTlmgO2xOp6Qnk.OWe','FINANCE',1,NOW(),NOW());
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 

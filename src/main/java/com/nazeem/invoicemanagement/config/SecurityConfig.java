@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
@@ -53,6 +54,27 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
+
+                        // Write operations on suppliers and invoices are limited
+                        // to FINANCE and ADMIN. Reads stay open to any
+                        // authenticated user so approvers can review invoices.
+                        // Approval endpoints enforce their own role checks.
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/suppliers",
+                                "/api/invoices"
+                        ).hasAnyRole("FINANCE", "ADMIN")
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/suppliers/{id}",
+                                "/api/invoices/{id}"
+                        ).hasAnyRole("FINANCE", "ADMIN")
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/suppliers/{id}",
+                                "/api/invoices/{id}"
+                        ).hasAnyRole("FINANCE", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
 

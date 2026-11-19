@@ -252,4 +252,59 @@ class InvoiceControllerTest {
 
         verify(invoiceService, never()).getAllInvoices();
     }
+
+    @Test
+    @org.springframework.security.test.context.support.WithMockUser(
+            roles = "APPROVER"
+    )
+    void createInvoiceShouldReturnForbiddenForApprover() throws Exception {
+
+        mockMvc.perform(post("/api/invoices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                createInvoiceRequest())))
+                .andExpect(status().isForbidden());
+
+        verify(invoiceService, never()).createInvoice(any(), any());
+    }
+
+    @Test
+    @org.springframework.security.test.context.support.WithMockUser(
+            roles = "APPROVER"
+    )
+    void updateInvoiceShouldReturnForbiddenForApprover() throws Exception {
+
+        mockMvc.perform(put("/api/invoices/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                createInvoiceRequest())))
+                .andExpect(status().isForbidden());
+
+        verify(invoiceService, never()).updateInvoice(any(), any());
+    }
+
+    @Test
+    @org.springframework.security.test.context.support.WithMockUser(
+            roles = "APPROVER"
+    )
+    void deleteInvoiceShouldReturnForbiddenForApprover() throws Exception {
+
+        mockMvc.perform(delete("/api/invoices/{id}", 1L))
+                .andExpect(status().isForbidden());
+
+        verify(invoiceService, never()).deleteInvoice(any());
+    }
+
+    @Test
+    @org.springframework.security.test.context.support.WithMockUser(
+            roles = "APPROVER"
+    )
+    void getAllInvoicesShouldBeAllowedForApprover() throws Exception {
+
+        when(invoiceService.getAllInvoices()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/invoices"))
+                .andExpect(status().isOk());
+    }
+
 }
