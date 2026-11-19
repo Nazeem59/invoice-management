@@ -7,7 +7,7 @@
 
 A REST API for supplier invoice processing, built with Java 21 and Spring Boot. It covers JWT authentication, role-based access control, an invoice approval workflow, an audit trail, and financial dashboard reports.
 
-**Live demo:** [Swagger UI](https://invoice-management-1qbd.onrender.com/swagger-ui/index.html) (hosted on Render's free tier, so the first request may take about a minute while the service wakes up).
+**Live demo:** [Swagger UI](https://invoice-management-1qbd.onrender.com/swagger-ui/index.html) (hosted on Render's free tier, so the first request may take about a minute while the service wakes up). Log in with any of the [demo accounts](#quick-start-docker) below.
 
 ## What this project demonstrates
 
@@ -102,7 +102,7 @@ On Windows PowerShell, use `copy .env.example .env` for step 1 and this for step
 | REST API | http://localhost:8080/api |
 | MySQL (host access) | `localhost:3308` |
 
-The database is initialized from `database/init/01-schema.sql` with three demo accounts (all use the password `Demo@12345`; for local development only):
+The database is initialized from `database/init/01-schema.sql` with three demo accounts. They all use the password `Demo@12345` and also work on the live demo:
 
 | Email | Role |
 |---|---|
